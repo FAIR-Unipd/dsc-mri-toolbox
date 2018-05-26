@@ -1,9 +1,17 @@
 
 # Dynamic Susceptibility Contrast MRI toolbox
 
+## About
+
+Dynamic Susceptibility Contrast (DSC) MRI toolbox is a MATLAB toolbox to analyze DSC-MRI data. The code was implemented by [@marcocastellaro](https://github.com/marcocastellaro)  and Denis Peruzzo. This web page hosts the developmental source code. 
+
 ## Features:
 
 ### Pseudo-automatic AIF selection
+
+The method is based on dicotomic hierarchical clustering method, please cite [1] if you use the AIF extraction feature:
+
+[1] **Peruzzo Denis**,  Bertoldo Alessandra, Zanderigo Francesca and Cobelli Claudio, “[Automatic selection of arterial input function on dynamic contrast-enhanced MR images][paper1]”, *Computer methods and programs in biomedicine, 104:e148-e157 (2011)*.
 
 ### Deconvolution
 
@@ -12,39 +20,13 @@
   - oSVD
   - NSR
   - Stable Spline
+  
+Please cite [2] if you perform the deconvolution with the Stable Spline algorithm.
+  
+[2] **Peruzzo Denis**,  Castellaro Marco, Pillonetto Gianluigi and Bertoldo Alessandra, “[Stable spline deconvolution for dynamic susceptibility contrast MRI][paper2]”, *Magnetic resonance in medicine, 78(5):1801--1811 (2017)*.
+    
 ### Leakage correction
 
-This tool is to be intended as a research tool and no medical decision should be made using it.
-
-Please cite if you use the Arterial Input Function tool 
-
-```
-@article{peruzzo2011automatic,
-  title={Automatic selection of arterial input function on dynamic contrast-enhanced MR images},
-  author={Peruzzo, Denis and Bertoldo, Alessandra and Zanderigo, Francesca and Cobelli, Claudio},
-  journal={Computer methods and programs in biomedicine},
-  volume={104},
-  number={3},
-  pages={e148--e157},
-  year={2011},
-  publisher={Elsevier}
-}
-```
-
-If you use the Stable Spline algorithm 
-
-```
-article{peruzzo2017stable,
-  title={Stable spline deconvolution for dynamic susceptibility contrast Mri},
-  author={Peruzzo, Denis and Castellaro, Marco and Pillonetto, Gianluigi and Bertoldo, Alessandra},
-  journal={Magnetic resonance in medicine},
-  volume={78},
-  number={5},
-  pages={1801--1811},
-  year={2017},
-  publisher={Wiley Online Library}
-}
-```
 
 ## Example
 
@@ -74,3 +56,14 @@ custom_options = DSC_mri_get_options();
 custom_options.display = 3;
 [cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR,custom_options);
 ```
+
+## License
+This software is open source. The bulk of the code is covered by the MIT license. This tool is to be intended as a research tool and no medical decision should be made using it.
+
+
+
+[//]: # (reference links)
+
+   [paper1]: <https://www.sciencedirect.com/science/article/pii/S0169260711000447>
+
+   [paper2]: <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.26582>
