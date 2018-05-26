@@ -1,0 +1,154 @@
+function [mask]=DSC_mri_mask(volumes,options)
+% ultima modifica: Denis Peruzzo 10/06/2010
+
+%Funzione del pacchetto DSC_mri - DSC_mri_mask
+%Autore: Castellaro Marco - Università di Padova - DEI
+%
+%Calcola le maschere per esami DSC-MRI.
+%
+%Parametri in ingresso: volumes (Matrice 4D) che contiene gli andamenti del
+%segnale DSC di tutti i voxel.
+%Options è la sruct che contiene le opzioni del metodo, quelli
+%significativi sono:
+%
+%options.mask.npixel: rappresenta il numero di pixel minimi di una
+%                     componente connessa che è utilizzata come soglia
+%                     per escludere dall'immagine lo scalpo e le zone
+%                     adiacenti all'esterno dell'encefalo
+%
+%options.display - livello 1 Mostra l'avanzamento dell'elaborazione
+%                - livello 2 Mostra le maschere e informazioni sulla soglia
+%                  e sulle intensità delle immagini da mascherare
+%
+%Parametri in uscita: struttura mask, che contiene
+% - aif: maschera ottimizzata per la ricerca della funzione di ingresso arteriale
+% - data: maschera ottimizzata per il mascheramento dell'intero encefalo
+% - threshold: soglia calcolata e fornita in uscita
+
+if options.display > 0
+    disp('Masking data... ');
+end
+
+nbin=100;
+
+volume_sum=sum(volumes,4);
+mask.data=zeros(size(volume_sum));
+mask.aif=zeros(size(volume_sum));
+
+[prob,intensity]=hist(volume_sum(1:options.nR*options.nC*options.nS),nbin);
+
+% Metodo Denis per identificare la soglia
+[maxValue,maxPos1]=max(prob); % Individua il primo picco delle intensità
+exitFlag=true;
+maxPos2=maxPos1+1;
+while exitFlag % Cerca il secondo picco delle intensità
+    [maxValue,maxPos]=max(prob(maxPos2:nbin));
+    if (maxPos~=1)||(maxPos2==nbin)
+        exitFlag=false;
+        maxPos2=maxPos2+maxPos-1;        
+    else
+        maxPos2=maxPos2+1;
+    end
+end
+
+[minValue,minPos]=min(prob(maxPos1:maxPos2)); % Individua il minimo tra i due picchi di intensità
+mask.threshold=intensity(minPos+maxPos1-1);
+
+
+
+% % Metodo Marco per identificare la soglia
+% t0=0.1*nbin+1;
+% 
+% der_prob=(prob(2:end)-prob(1:end-1))./(prob(2)-prob(1));
+% der_probS = smooth(der_prob,t0,'moving');
+% der2_prob=(der_probS(2:end).*der_probS(1:end-1)) <0;
+% 
+% der2_prob=find(der2_prob>0);
+% 
+% mask.threshold=intensity(der2_prob(1)+2);
+
+
+if options.display > 0
+    disp(['Threshold: ' num2str(mask.threshold)]);
+    if options.display > 1
+        
+        hf_hist=figure();
+        hist(volume_sum(1:options.nR*options.nC*options.nS),nbin)
+        line([mask.threshold mask.threshold],[0 1.05*max(prob)], ...
+            'Color','g','LineStyle','--');
+        ylim([0 1.05*max(prob)])
+    end
+end
+
+mask.aif=volume_sum>mask.threshold;
+hf_mask=zeros(options.nS,1);
+
+for s=1:options.nS
+    %copro eventuali "buchi" creati dalla sogliatura
+    temp = mask.aif(:,:,s);
+    
+    %elimino le componenti connesse minori e lascio intatte quelle maggiori
+    %di #options.mask.pixel
+    
+    CC = bwconncomp(temp);
+    numPixels = cellfun(@numel,CC.PixelIdxList);
+    [~,idx] = max(numPixels);
+    
+    for j=1:size(numPixels,2)
+        
+        if numPixels(idx) > numPixels(j) && numPixels(j) < options.mask.npixel
+            
+            temp(CC.PixelIdxList{j}) = 0;
+        end
+    end
+    
+    mask.data(:,:,s)=imfill(temp,'holes');
+    
+    if (options.display > 2)||((options.display >1) && (s == round(0.5*nS)))
+        hf_mask(s)=figure();
+        
+        subplot(121)
+        imagesc(volume_sum(:,:,s))
+        colormap('gray')
+        title(['Slice ' num2str(s) '/' num2str(options.nS) ' - Masked Data for AIF selection'])
+        
+        B = bwboundaries(temp,4);
+        hold on
+        for k = 1:length(B)
+            boundary = B{k};
+            plot(boundary(:,2), boundary(:,1), 'g', 'LineWidth', 2)
+        end
+        
+        subplot(122)
+        imagesc(volume_sum(:,:,s))
+        
+        B = bwboundaries(mask.data(:,:,s),4);
+        hold on
+        for k = 1:length(B)
+            boundary = B{k};
+            plot(boundary(:,2), boundary(:,1), 'g', 'LineWidth', 2)
+        end
+        colormap('gray')
+        title(['Slice ' num2str(s) '/' num2str(options.nS) ' - Masked Data'])
+        
+    end
+end
+mask.aif=mask.aif.*mask.data;
+
+if options.display > 0
+    if options.display > 2
+        pause
+        for cont_h=1:length(hf_mask)
+            try
+                close(hf_mask(cont_h))
+            end          
+        end
+        for cont_h=1:length(hf_hist)
+            try
+                close(hf_hist(cont_h))
+            end
+            
+        end
+    end
+end
+end
