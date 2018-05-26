@@ -1,18 +1,18 @@
 
-## Dynamic Susceptibility Contrast MRI toolbox
+# Dynamic Susceptibility Contrast MRI toolbox
 
-### Feature:
+## Features:
 
-# AIF selection
+### Pseudo-automatic AIF selection
 
-# Deconvolution
+### Deconvolution
 
   - SVD
   - cSVD
   - oSVD
   - NSR
   - Stable Spline
-# Leakage correction
+### Leakage correction
 
 This tool is to be intended as a research tool and no medical decision should be made using it.
 
