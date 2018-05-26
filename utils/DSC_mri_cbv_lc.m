@@ -42,23 +42,23 @@ end
 % 
 
 
-SD = vol2mat (conc,mask.data);
+SD = vol2mat (conc,logical(mask.data));
 SD = nanstd(SD(:,1:floor(mean(bolus(:)))),[],2);
 SD_map = zeros(size(cbv));
-SD_map(mask.data) = SD;
+SD_map(logical(logical(mask.data))) = SD;
 
-AVG = vol2mat (conc,mask.data);
+AVG = vol2mat (conc,logical(mask.data));
 AVG = nanmedian(AVG(:,end-10:end),2);
 AVG_map = zeros(size(cbv));
-AVG_map(mask.data) = AVG;
+AVG_map(logical(mask.data)) = AVG;
 
 
-mask_not_enhancing = and(mask.data, not(abs(AVG_map) > 2.*SD_map));
+mask_not_enhancing = and(logical(mask.data), not(abs(AVG_map) > 2.*SD_map));
 conc(isinf(conc)) = 0;
 R2star_AVG_not_enhancing = nanmean(vol2mat(conc,mask_not_enhancing))';
 
 
-Delta_R2star = vol2mat(conc,mask.data);
+Delta_R2star = vol2mat(conc,logical(mask.data));
 
 phat = zeros(size(Delta_R2star,1),2);
 CVp = zeros(size(Delta_R2star,1),2);
@@ -87,15 +87,15 @@ K1_CV_vett  = CVp(:,2);
 K2_map  = zeros(size(cbv));
 K1_map  = zeros(size(cbv));
 
-K2_map(mask.data) = K2_vett;
-K1_map(mask.data) = K1_vett;
+K2_map(logical(mask.data)) = K2_vett;
+K1_map(logical(mask.data)) = K1_vett;
 
 K2_CV_map = zeros(size(cbv));
 K1_CV_map = zeros(size(cbv));
 
 
-K2_CV_map(mask.data) = K2_CV_vett;
-K1_CV_map(mask.data) = K1_CV_vett;
+K2_CV_map(logical(mask.data)) = K2_CV_vett;
+K1_CV_map(logical(mask.data)) = K1_CV_vett;
 
 for s=1:options.nS
     cbv(:,:,s)=mask.data(:,:,s).* ...

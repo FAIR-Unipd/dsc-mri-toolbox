@@ -955,10 +955,10 @@ function [GVparametri, cv_est_parGV]   = fitGV_picco2(dati,pesi,cost_picco1,opti
 % OPZIONI STIMATORE
 options             = optimset('lsqnonlin') ;
 options.Display     = 'none'                ;
-options.MaxFunEvals = 1000                 ;
-options.MaxIter     = 1000                 ;
-options.TolX        = 1e-4 ;
-options.TolFun      = 1e-4 ;
+options.MaxFunEvals = 10000                 ;
+options.MaxIter     = 10000                 ;
+options.TolX        = 1e-8 ;
+options.TolFun      = 1e-8 ;
 %options.TolCon      = 1e-2 ;
 %options.TolPCG      = 1e-8 ;
 options.LargeScale  = 'on' ;

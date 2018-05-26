@@ -1,5 +1,5 @@
-function [cbv,cbf,mtt,ttp,mask,aif,conc,s0,cbv_last,fwhm,K1_map,K2_map,K1_CV_map,K2_CV_map]=DSC_mri_core(volumes,te,tr,optionsIN,aif,mask)
-% ultima modifica: Marco Castellaro 26/05/2018
+function [cbv,cbf,mtt,cbv_lc,ttp,mask,aif,conc,s0,fwhm,K2_map]=DSC_mri_core(volumes,te,tr,optionsIN,aif,mask)
+% last modification: Marco Castellaro 26/05/2018
 
 addpath('utils')
 
@@ -55,6 +55,7 @@ end
 if options.display > 0
     disp('Checking data...');
 end
+volumes = double(volumes);
 [nR,nC,nS,nT]=size(volumes);
 options.nR=nR;
 options.nC=nC;
@@ -153,35 +154,33 @@ if options.aif.enable
 end
 
 
-%----- CALCOLO DELLE MAPPE -----------------------------------------------
+%----- MAP Calculation -----------------------------------------------
 if options.display>0
     disp(' ')
-    disp('Calculating perfusion maps...')
+    disp('Calculating maps...')
 end
 
     
-%----- CALCOLO DEL CBV ---------------------------------------------------
+%----- CBV calculation ---------------------------------------------------
 [cbv]=DSC_mri_cbv(conc,aif.fit.gv,mask,options);
 
-%----- CALCOLO DEL CBV (leackage monitoring) ----
-[cbv_last,K1_map,K2_map,K1_CV_map,K2_CV_map]=DSC_mri_cbv_lc(conc,aif.fit.gv,mask,bolus,options);
+%----- CBV leackage correction  ------------------------------------------
+[cbv_lc,~,K2_map,~,~]=DSC_mri_cbv_lc(conc,aif.fit.gv,mask,bolus,options);
 
-%----- CALCOLO DEL CBF ---------------------------------------------------
+%----- CBF calculation ---------------------------------------------------
 [cbf]=DSC_mri_cbf(conc,aif.fit.gv,mask,options);
 
-%----- CALCOLO DEL MTT ---------------------------------------------------
+%----- MTT calculation ---------------------------------------------------
 [mtt]=DSC_mri_mtt(cbv,cbf,options);
 
-%----- CALCOLO DEL TTP - OPZIONALE ---------------------------------------
+%----- TTP calculation ---------------------------------------------------
 if nargout > 3
     [ttp]=DSC_mri_ttp(conc,mask.data,options);
     [fwhm]=DSC_mri_fwhm(conc,mask.data,options);
 end
 
 
-%----- PREPARAZIONE DELLE USCITE -----------------------------------------
-%Viene fornita in uscita solo la matrice con le maschere da applicare sulle
-%mappe parametriche
+%----- Output refinements -----------------------------------------
 mask=mask.data;
 
 end
