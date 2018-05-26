@@ -1,23 +1,21 @@
 function [cbv,cbf,mtt,ttp,mask,aif,conc,s0,cbv_last,fwhm,K1_map,K2_map,K1_CV_map,K2_CV_map]=DSC_mri_core(volumes,te,tr,optionsIN,aif,mask)
-% ultima modifica: Marco Castellaro 15/07/2010
-% ultima modifica: Denis Peruzzo 10/06/2010
+% ultima modifica: Marco Castellaro 26/05/2018
 
+addpath('utils')
 
-
-%----- CONTROLLO DEI PARAMETRI DI INGRESSO - PARTE 1 ----------------------
-% Controlla che siano stati forniti in ingresso e in uscita almeno il 
-% numero minimo di parametri necessari
-% Ingresso
+%----- CHECK OF INPUT PARAMETERS - PART 1 ----------------------
+% Check that input and output has the minimum number of mandatory parameters 
+% Input
 if nargin<1
     error('Input data required.')
 end
 
-% Uscita
+% Output
 if nargout < 3
     error('Required almost tree exiting parameters: cbf,cbv and mtt.')
 end
 
-% Adeguamenti al numero di parametri di input forniti
+% Set Default parameters in case of not providing TE and TR
 switch nargin
     case 1
         tr=1;
@@ -26,12 +24,12 @@ switch nargin
         tr=1;
 end
 
-% Controllo se sono state fornite in ingresso le opzioni
+% Check if options are provided, otherwise load default parameters
 if nargin < 4
-    % Carica le opzioni di default
+    % Load default options
     options=DSC_mri_getOptions;  
 else
-    % Utilizza le opzioni fornite in ingresso
+    % Use provided options
     options=optionsIN;
     clear optionsIN;
 end
@@ -48,6 +46,7 @@ if options.display>0
     disp(' | |_| |  ___| | | |___        | |  | | | |\ \   | | ')
     disp(' |_____/ |____/  \_____|       |_|  |_| |_| \_\ |___|')
     disp(' ')
+    disp('                       TOOLBOX                       ')
     disp('          by Denis Peruzzo & Marco Castellaro')
     disp(' ')
 end
@@ -77,17 +76,16 @@ if options.display > 0
     disp(['          Repetition time - ' num2str(options.tr) ' s']);
 end
 
-%----- CONTROLLO DEI PARAMETRI DI INGRESSO - PARTE 2 ----------------------
-%AIF - colonna o riga??
+%----- CHECK OF INPUT PARAMETERS - PART 2 ----------------------
+% Check wether the AIF is column of row vector
 if nargin > 4
-    %va bene se vettore da pensare per la struct
     if not(isempty(aif))
         if not(nT==size(aif.conc,1))
             if not(nT==size(aif.conc,2))
                 if size(aif.conc,1)==0 && size(aif.conc,2)==0
                     options.aif=1;
                 else
-                    error('Aif not equal to samples data.')
+                    error('AIF dimensions are not compatible to samples data, please provide a compatible AIF.')
                 end
             end
         end
@@ -95,7 +93,7 @@ if nargin > 4
 end
 
 
-%----- CALCOLO DELLA MASCHERA --------------------------------------------
+%----- MASK CALCULATION --------------------------------------------
 if nargin < 5
     if not(options.conc)
         [mask]=DSC_mri_mask(volumes,options);
@@ -109,7 +107,7 @@ elseif size(mask,1)==0
 else
     if options.aif.enable
         [mask]=DSC_mri_mask_only_aif(volumes,mask,options);
-        %controllo la coerenza della maschera con i dati
+        % Check mask dimension 
         if not(nR==size(mask.data,1))
             error('Rows mask not equal to data.')
         elseif not(nC==size(mask.data,2))
@@ -120,7 +118,7 @@ else
         end
     else
     
-        %controllo la coerenza della maschera con i dati
+        % Check mask dimension 
         if not(nR==size(mask,1))
             error('Rows mask not equal to data.')
         elseif not(nC==size(mask,2))
@@ -165,11 +163,8 @@ end
 %----- CALCOLO DEL CBV ---------------------------------------------------
 [cbv]=DSC_mri_cbv(conc,aif.fit.gv,mask,options);
 
-%----- CALCOLO DEL CBV nella porzione finale del segnale (leackage monitoring) ----
-[cbv_last,K1_map,K2_map,K1_CV_map,K2_CV_map]=DSC_mri_cbv_last(conc,aif.fit.gv,mask,bolus,options);
-
-%%----- CALCOLO DEL CBV nella porzione finale del segnale (leackage monitoring) ----
-%[cbv_leakage]=DSC_mri_cbv_lc(conc,aif.fit.gv,mask,options);
+%----- CALCOLO DEL CBV (leackage monitoring) ----
+[cbv_last,K1_map,K2_map,K1_CV_map,K2_CV_map]=DSC_mri_cbv_lc(conc,aif.fit.gv,mask,bolus,options);
 
 %----- CALCOLO DEL CBF ---------------------------------------------------
 [cbf]=DSC_mri_cbf(conc,aif.fit.gv,mask,options);

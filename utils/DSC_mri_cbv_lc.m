@@ -1,4 +1,4 @@
-function [cbv_corrected,K1_map,K2_map,K1_CV_map,K2_CV_map]=DSC_mri_cbv_last(conc,aif,mask,bolus,options)
+function [cbv_corrected,K1_map,K2_map,K1_CV_map,K2_CV_map]=DSC_mri_cbv_lc(conc,aif,mask,bolus,options)
 %Funzione del pacchetto DSC_mri - DSC_mri_cbv
 %Autore: Castellaro Marco - Universit� di Padova - DEI
 %
