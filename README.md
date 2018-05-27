@@ -42,7 +42,7 @@ You need to load the dataset with matlab. First of all it is needed to convert t
 
 Matlab provides routines to load Nifti file however an alternative could be to use the NIfTI toolbox that can be downloaded [here](https://it.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image). 
 
-Below the example code to load the data and perform a DSC perfusion quantification. By default the code will produce CBV,CBF and MTT maps. CBV will be also corrected for leackage if present. CBF by default will be computed by SVD,cSVD and oSVD and the correspondent MTT maps will be produced.
+Below the example code to load the data and perform a DSC perfusion quantification. By default the code will produce CBV, CBF and MTT maps. CBV will be also corrected for leackage if present. CBF by default will be computed by SVD, cSVD and oSVD and the correspondent MTT maps will be produced.
 
 ```
 % load the dataset to be analyzed 
@@ -70,6 +70,8 @@ custom_options = DSC_mri_getOptions();
 custom_options.display = 3;
 [cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR,custom_options);
 ```
+
+A demo file that perform analysis of a sample subject (included in the demo-data folder) can be find in the [DSC_main_demo.m](DSC_main_demo.m) file.
 
 ## GUI 
 
