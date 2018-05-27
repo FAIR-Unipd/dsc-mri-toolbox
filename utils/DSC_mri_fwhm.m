@@ -14,6 +14,6 @@ end
 
 
 fwhm_map = zeros(size(mask));
-fwhm_map(mask) = fwhm_vect;
+fwhm_map(logical(mask)) = fwhm_vect;
 end
 

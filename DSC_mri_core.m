@@ -171,7 +171,7 @@ end
 [cbf]=DSC_mri_cbf(conc,aif.fit.gv,mask,options);
 
 %----- MTT calculation ---------------------------------------------------
-[mtt]=DSC_mri_mtt(cbv,cbf,options);
+[mtt]=DSC_mri_mtt(cbv_lc,cbf,options);
 
 %----- TTP calculation ---------------------------------------------------
 if nargout > 3

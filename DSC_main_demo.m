@@ -9,5 +9,7 @@ TE = 0.025; % 25ms
 TR = 1.55;  % 1.55s
 
 % Perform quantification
-[cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR);
+[cbv,cbf,mtt,cbv_lc,ttp,mask,aif,conc,s0]=DSC_mri_core(DSC_volume,TE,TR);
 
+% View Results
+DSC_mri_show_results(cbv_lc,cbf,mtt,ttp,mask,aif,conc,s0);

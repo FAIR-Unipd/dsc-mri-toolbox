@@ -111,7 +111,7 @@ handles.dati.CBV  = varargin{1};
 handles.dati.CBF  = varargin{2};
 handles.dati.MTT  = varargin{3};
 handles.dati.TTP  = varargin{4};
-handles.dati.mask = varargin{5}.data;
+handles.dati.mask = varargin{5};
 handles.dati.aif  = varargin{6};
 handles.dati.conc = varargin{7};
 [nR,nC,nS,nT]=size(handles.dati.conc);
@@ -170,7 +170,7 @@ row=str2double(stringaVoxel(1:find(stringaVoxel=='-')-1));
 col=str2double(stringaVoxel(find(stringaVoxel=='-')+1:length(stringaVoxel)));
 decList=get(handles.deconvolution_list,'String');
 dec=decList{get(handles.deconvolution_list,'Value'),1};
-vettInd= find(handles.dati.mask);
+vettInd= find(handles.dati.mask>0);
 
 % MAPPE DI PERFUSIONE
 % estraggo le mappe
@@ -182,11 +182,12 @@ eval(['mappaTTP=handles.dati.TTP;']);
 % CBF
 % Calcolo i bound
 vettCBF=sort(mappaCBF(vettInd));
-CBFbound=[0 vettCBF(round(0.95*length(vettCBF)))];
+CBFbound=[0 vettCBF(round(0.98*length(vettCBF)))];
 
 mappa=mappaCBF;
-mappa(find(mappaCBF>CBFbound(2)))=CBFbound(2);
-imagesc(mappa(:,:,slice),'Parent',handles.CBFmap)
+imagesc(handles.CBFmap,mappa(:,:,slice))
+set(handles.CBFmap,'CLim',CBFbound)
+
 colormap('hot')
 hold(handles.CBFmap,'on')
 plot(handles.CBFmap,col,row,'go','MarkerSize',5,'LineWidth',2)
@@ -195,11 +196,12 @@ set(handles.CBFmap,'Xtick',[],'Ytick',[])
 % CBV
 % Calcolo i bound
 vettCBV=sort(mappaCBV(vettInd));
-CBVbound=[0 vettCBV(round(0.95*length(vettCBV)))];
+CBVbound=[0 vettCBV(round(0.98*length(vettCBV)))];
 
 mappa=mappaCBV;
-mappa(find(mappaCBV>CBVbound(2)))=CBVbound(2);
-imagesc(mappa(:,:,slice),'Parent',handles.CBVmap)
+imagesc(handles.CBVmap,mappa(:,:,slice))
+set(handles.CBVmap,'CLim',CBVbound)
+
 colormap('hot')
 hold(handles.CBVmap,'on')
 plot(handles.CBVmap,col,row,'go','MarkerSize',5,'LineWidth',2)
@@ -208,12 +210,11 @@ set(handles.CBVmap,'Xtick',[],'Ytick',[])
 % MAPPE DI PERFUSIONE
 % MTT
 % Calcolo i bound
-vettMTT=sort(mappaMTT(vettInd));
-MTTbound=[0 vettMTT(round(0.95*length(vettMTT)))];
+MTTbound=[prctile(mappaMTT(vettInd),1) prctile(mappaMTT(vettInd),99)];
 
 mappa=mappaMTT;
-mappa(find(mappaMTT>MTTbound(2)))=MTTbound(2);
-imagesc(mappa(:,:,slice),'Parent',handles.MTTmap)%,'Clim',MTTbound)
+imagesc(handles.MTTmap,mappa(:,:,slice))
+set(handles.MTTmap,'CLim',MTTbound)
 colormap('hot')
 hold(handles.MTTmap,'on')
 plot(handles.MTTmap,col,row,'go','MarkerSize',5,'LineWidth',2)
