@@ -5,11 +5,11 @@
 
 Dynamic Susceptibility Contrast (DSC) MRI toolbox is a MATLAB toolbox to analyze DSC-MRI data. The code was implemented by Denis Peruzzo and [@marcocastellaro](https://github.com/marcocastellaro). This web page hosts the developmental source code. 
 
-## Features:
+## Features
 
 ### Semi-automatic AIF selection
 
-The method is based on dicotomic hierarchical clustering method, please cite [1] if you use the AIF extraction feature:
+The method is based on dicotomic hierarchical clustering method, it only need to select the slice where it will look for the best AIF. Please cite [1] if you use the AIF extraction tool:
 
 [1] **Peruzzo Denis**,  Bertoldo Alessandra, Zanderigo Francesca and Cobelli Claudio, “[Automatic selection of arterial input function on dynamic contrast-enhanced MR images][paper1]”, *Computer methods and programs in biomedicine, 104:e148-e157 (2011)*.
 
@@ -38,11 +38,11 @@ Leakage correction is implemented following the approach proposed by Boxerman et
 
 ## Example
 
-You need to load the dataset with matlab. First of all it is needed to convert the DSC acquisition from DICOM to NIfTI. We do suggest to use dicom2niix that can be downloaded [here](https://github.com/neurolabusc/dcm2niix). 
+You need to load the dataset with matlab. First of all it is needed to convert the DSC acquisition from DICOM to NIfTI. We do suggest to use *dicom2niix* that can be downloaded [here](https://github.com/neurolabusc/dcm2niix). 
 
-Matlab provides routines to load Nifti file however an alternative could be to use the NIfTI toolbox that can be downloaded [here](https://it.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image). 
+Matlab provides routines to load Nifti file however an alternative could be to use the *NIfTI toolbox* that can be downloaded [here](https://it.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image). 
 
-Below the example code to load the data and perform a DSC perfusion quantification. By default the code will produce CBV, CBF and MTT maps. CBV will be also corrected for leackage if present. CBF by default will be computed by SVD, cSVD and oSVD and the correspondent MTT maps will be produced.
+Below the example code to load the data and perform a DSC perfusion quantification. By default the code will produce *CBV*, *CBF* and *MTT* maps. *CBV* will be also corrected for leackage if present. *CBF* by default will be computed by *SVD*, *cSVD* and *oSVD* and the correspondent *MTT* maps will be produced.
 
 ```
 % load the dataset to be analyzed 
@@ -57,7 +57,7 @@ TR = 1.55;  % 1.55s
 [cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR);
 ```
 
-A good way to perform a debug of the process is to load the default options with ```DSC_mri_getOptions``` and change the default display properties to 3. 
+A good way to perform a debug of the process is to load the default options with ```DSC_mri_getOptions``` and change the default ```display``` properties to ```3```. 
 
 Values for display verbose options 
  - ```0``` no diplay at all
