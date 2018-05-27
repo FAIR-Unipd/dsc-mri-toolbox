@@ -60,10 +60,10 @@ TR = 1.55;  % 1.55s
 A good way to perform a debug of the process is to load the default options with ```DSC_mri_getOptions``` and change the default display properties to 3. 
 
 Values for display verbose options 
-  0. no diplay at all
-  1. notify only with text messages
-  2. notify with representative images
-  3. debug - notify many images, to be used only for tests, please avoid id when analyzing many subjects
+ - ```0``` no diplay at all
+ - ```1``` notify only with text messages
+ - ```2``` notify with representative images
+ - ```3``` debug - notify many images, to be used only for tests, please avoid id when analyzing many subjects
 
 ```
 custom_options = DSC_mri_getOptions();
