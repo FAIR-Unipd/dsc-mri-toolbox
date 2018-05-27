@@ -57,6 +57,14 @@ custom_options.display = 3;
 [cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR,custom_options);
 ```
 
+## GUI 
+
+Once the quantification has been performed it is possible to use a very simple GUI with the command ```DSC_mri_show_results``` to display maps computed with the toolbox and also to evaluate how each method selected performed in term of residue function calculation and reconvolution with the AIF. It is possible to select the voxel to be inspected.
+
+```
+DSC_mri_show_results(cbv_lc,cbf,mtt,ttp,mask,aif,conc,s0);
+```
+
 ## License
 This software is open source. The bulk of the code is covered by the MIT license. This tool is to be intended as a research tool and no medical decision should be made using it.
 
