@@ -38,11 +38,11 @@ Leakage correction is implemented following the approach proposed by Boxerman et
 
 ## Example
 
-You need to load the dataset with matlab. First of all it is needed to convert the DSC acquisition from DICOM to NIfTI. We do suggest to use dicom2niix that can be downloaded [here](https://github.com/neurolabusc/dcm2niix). 
+You need to load the dataset with matlab. First of all it is needed to convert the DSC acquisition from DICOM to NIfTI. We do suggest to use *dicom2niix* that can be downloaded [here](https://github.com/neurolabusc/dcm2niix). 
 
-Matlab provides routines to load Nifti file however an alternative could be to use the NIfTI toolbox that can be downloaded [here](https://it.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image). 
+Matlab provides routines to load Nifti file however an alternative could be to use the *NIfTI toolbox* that can be downloaded [here](https://it.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image). 
 
-Below the example code to load the data and perform a DSC perfusion quantification. By default the code will produce CBV, CBF and MTT maps. CBV will be also corrected for leackage if present. CBF by default will be computed by SVD, cSVD and oSVD and the correspondent MTT maps will be produced.
+Below the example code to load the data and perform a DSC perfusion quantification. By default the code will produce *CBV*, *CBF* and *MTT* maps. *CBV* will be also corrected for leackage if present. *CBF* by default will be computed by *SVD*, *cSVD* and *oSVD* and the correspondent *MTT* maps will be produced.
 
 ```
 % load the dataset to be analyzed 
@@ -57,7 +57,7 @@ TR = 1.55;  % 1.55s
 [cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR);
 ```
 
-A good way to perform a debug of the process is to load the default options with ```DSC_mri_getOptions``` and change the default display properties to 3. 
+A good way to perform a debug of the process is to load the default options with ```DSC_mri_getOptions``` and change the default ```display``` properties to ```3```. 
 
 Values for display verbose options 
  - ```0``` no diplay at all
