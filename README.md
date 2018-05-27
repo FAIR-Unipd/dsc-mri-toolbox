@@ -7,7 +7,7 @@ Dynamic Susceptibility Contrast (DSC) MRI toolbox is a MATLAB toolbox to analyze
 
 ## Features:
 
-### Pseudo-automatic AIF selection
+### Semi-automatic AIF selection
 
 The method is based on dicotomic hierarchical clustering method, please cite [1] if you use the AIF extraction feature:
 
