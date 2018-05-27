@@ -57,10 +57,16 @@ TR = 1.55;  % 1.55s
 [cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR);
 ```
 
-A good way to perform a debug of the process is to load the default options with ```DSC_mri_get_options``` and change the default display properties to 3.
+A good way to perform a debug of the process is to load the default options with ```DSC_mri_getOptions``` and change the default display properties to 3. 
+
+Values for display verbose options 
+0 no diplay at all
+1 notify only with text messages
+2 notify with representative images
+3 debug - notify many images, to be used only for tests, please avoid id when analyzing many subjects
 
 ```
-custom_options = DSC_mri_get_options();
+custom_options = DSC_mri_getOptions();
 custom_options.display = 3;
 [cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR,custom_options);
 ```
@@ -75,8 +81,6 @@ DSC_mri_show_results(cbv_lc,cbf,mtt,ttp,mask,aif,conc,s0);
 
 ## License
 This software is open source. The bulk of the code is covered by the MIT license. This tool is to be intended as a research tool and no medical decision should be made using it.
-
-
 
 [//]: # (reference links)
 
