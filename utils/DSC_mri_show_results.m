@@ -255,8 +255,13 @@ function varargout = DSC_mri_show_results_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
+try
 varargout{1} = handles.output;
 close(handles.figure1)
+catch ME
+    
+end
+
 %% ------------------------------------------------------------------------
 
 
