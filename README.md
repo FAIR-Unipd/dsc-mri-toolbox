@@ -54,7 +54,7 @@ TE = 0.025; % 25ms
 TR = 1.55;  % 1.55s
 
 % Perform quantification
-[cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR);
+[cbv,cbf,mtt,cbv_lc,ttp,mask,aif,conc,s0]=DSC_mri_core(DSC_volume,TE,TR);
 ```
 
 A good way to perform a debug of the process is to load the default options with ```DSC_mri_getOptions``` and change the default ```display``` properties to ```3```. 
@@ -68,7 +68,7 @@ Values for display verbose options
 ```
 custom_options = DSC_mri_getOptions();
 custom_options.display = 3;
-[cbv,cbf,mtt,cbv_lc]=DSC_mri_core(DSC_volume,TE,TR,custom_options);
+[cbv,cbf,mtt,cbv_lc,ttp,mask,aif,conc,s0]=DSC_mri_core(DSC_volume,TE,TR,custom_options);
 ```
 
 A demo file that perform analysis of a sample subject (included in the demo-data folder) can be find in the [DSC_main_demo.m](DSC_main_demo.m) file.
