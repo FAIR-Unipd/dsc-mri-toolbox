@@ -3,7 +3,7 @@
 
 ## About
 
-Dynamic Susceptibility Contrast (DSC) MRI toolbox is a MATLAB toolbox to analyze DSC-MRI data. The code was implemented by [@peruzzod] and [@marcocastellaro](https://github.com/marcocastellaro). This web page hosts the developmental source code. 
+Dynamic Susceptibility Contrast (DSC) MRI toolbox is a MATLAB toolbox to analyze DSC-MRI data. The code was implemented by [@peruzzod](https://github.com/peruzzod) and [@marcocastellaro](https://github.com/marcocastellaro). This web page hosts the developmental source code. 
 
 ## Features
 
