@@ -88,12 +88,19 @@ end
 
 %%
 function [AIF]=estraiAIF(AIFslice,mask,options)
+% Extracts the AIF from the input slice.
+% 1) Identify the region containing the AIF
+% 2) Decimation of candidate voxels
+% 3) Apply hierarchical cluster algorithm to detect arterial voxels
+% 4) Prepare the output
+%
 % Estrae la AIF dalla slice fornita in ingresso.
 % 1) Individua la regione contenente la AIF
 % 2) Decimazione dei voxel candidati
 % 3) Applica l'algoritmo di cluster gerarchico per individuare i voxel
 %    arteriali
 % 4) Prepara l'output
+
 
 % Preparazione variabili accessorie e dei parametri
 semiasseMag = options.aif.semiasseMaggiore;
@@ -229,6 +236,11 @@ AUC=sum(AIFslice,3); % calcolo l'AUC di ogni voxel.
 AUC=AUC.*ROI;
 AUC(isinf(AUC))=0;
 
+
+% kina like:
+% soglia = prctile(AUC(AUC(:)>0),100-totCandidatiDaTenere*100/sum(AUC(:)>0));
+% yet with some error cases
+
 ciclo=true;
 nCiclo=0;
 AUCdown=min(min(AUC));
@@ -250,6 +262,7 @@ while ciclo
     end
 end
 
+% %
 
 ROIauc=2.*ROI-ROI.*(AUC>soglia); % Vale 2 per i voxel scartati, 1 per quelli tenuti.
 if options.display > 2 
@@ -696,6 +709,12 @@ end
 
 %% ------------------------------------------------------------------------
 function [REG]                         = calcolaReg(y,x,maschera)
+% Calculates the irregularity index of the trend of the curve of
+% concentration for each voxel. The index is calculated by normalizing
+% area a! so as not to penalize voxels with high areas.
+% The formula used to calculate the � index
+% CTC=integrale((C"(t))^2 dt)
+
 % Calcola l'indice di irregolarit� dell'andamento della curva di
 % concentrazione per ciascun voxel. L'indice viene calcolato normalizzando
 % l'area a ! in modo da non penalizzare voxel con aree elevate.
@@ -853,7 +872,7 @@ pesi(TTP-1)=pesi(TTP-1)./2;
 
 %TROVO FINE PRIMO PICCO (20% valore massimo)
 i=TTP;
-while dati(i)>0.2*dati(TTP)
+while (dati(i)-dati(end))>0.2*(dati(TTP)-dati(end)) % #EP
     i=i+1;
 end
 
