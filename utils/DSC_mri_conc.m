@@ -90,22 +90,9 @@ thresh=options.S0.thresh;
 % 1) calcolo dell'istante di iniezione del bolo
 % 1.1) calcolo dell'andamento medio
 
-mean_signal=zeros(size(options.time));
-
-if options.waitbar
-    hw=waitbar(0,'Retriving S0...');
-end
-for s=1:options.nS
-    for t=1:options.nT
-        if options.waitbar
-            waitbar((options.nT*(s-1)+(t-1))/(options.nT*options.nS),hw);
-        end
-        indMask=find(mask(:,:,s));
-        mean_signal(s,t)=mean(volumes(indMask+(options.nR*options.nC*options.nS)*(t-1)+(options.nS*(s-1))));
-        
-        clear('temp','indMask');
-    end
-end
+nmask = reshape(sum(sum(mask,1),2),options.nS,1);
+tvolumes = volumes.*repmat(mask,1,1,1,options.nT);
+mean_signal = reshape(sum(sum(tvolumes,2),1),options.nS,options.nT)./(repmat(nmask,1,options.nT)+eps);
 
 for s=1:options.nS
     % 1.2) calcolo dell'istante di iniezione del bolo
@@ -164,5 +151,6 @@ if options.waitbar
         delete(hw);
     end
 end
+
 end
 
