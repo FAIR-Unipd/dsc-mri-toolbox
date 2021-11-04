@@ -95,7 +95,7 @@ end
 
 
 %----- MASK CALCULATION --------------------------------------------
-if nargin < 5
+if nargin < 6
     if not(options.conc)
         [mask]=DSC_mri_mask(volumes,options);
     else
