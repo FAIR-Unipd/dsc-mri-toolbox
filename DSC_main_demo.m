@@ -24,5 +24,17 @@ TR = 1.55;  % 1.55s
 
 [cbv,cbf,mtt,cbv_lc,ttp,mask,aif,conc,s0]=DSC_mri_core(DSC_volume,TE,TR);
 
-% ------  View Results --------------------------------------------------- 
+% ------ View Results ----------------------------------------------------
 DSC_mri_show_results(cbv_lc,cbf,mtt,ttp,mask,aif,conc,s0);
+
+% ------ Save Results in NIFTI format ------------------------------------
+% ------ use header information of the original DSC-MRI sequence ---------
+nifti_template = DSC_info;
+nifti_template.Datatype='double';
+nifti_template.BitsPerPixel=64;
+nifti_template.ImageSize=size(cbv);
+nifti_template.PixelDimensions=nifti_template.PixelDimensions(1:3);
+niftiwrite(cbv,fullfile('demo-data','cbv.nii'),nifti_template)
+gzip(fullfile('demo-data','cbv.nii'))
+delete(fullfile('demo-data','cbv.nii'))
+
