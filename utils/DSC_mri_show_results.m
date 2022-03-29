@@ -158,10 +158,12 @@ guidata(hObject, handles);
 
 % UIWAIT makes DSC_mri_show_results wait for user response (see UIRESUME)
 uiwait(handles.figure1);
+uiresume(handles.figure1);
 %% ------------------------------------------------------------------------
 
 function []=aggiornaPlot(handles)
 % Aggiorna tutti i plot della figura
+% Update all the plots in the figure
 
 % LEGGO LA POSIZIONE DI COSA VISUALIZZARE
 slice=get(handles.slice_slider,'Value');
@@ -185,7 +187,8 @@ vettCBF=sort(mappaCBF(vettInd));
 CBFbound=[0 vettCBF(round(0.98*length(vettCBF)))];
 
 mappa=mappaCBF;
-imagesc(handles.CBFmap,mappa(:,:,slice))
+axes(handles.CBFmap);
+imagesc(mappa(:,:,slice))
 set(handles.CBFmap,'CLim',CBFbound)
 
 colormap('hot')
@@ -199,7 +202,8 @@ vettCBV=sort(mappaCBV(vettInd));
 CBVbound=[0 vettCBV(round(0.98*length(vettCBV)))];
 
 mappa=mappaCBV;
-imagesc(handles.CBVmap,mappa(:,:,slice))
+axes(handles.CBVmap);
+imagesc(mappa(:,:,slice))
 set(handles.CBVmap,'CLim',CBVbound)
 
 colormap('hot')
@@ -213,7 +217,8 @@ set(handles.CBVmap,'Xtick',[],'Ytick',[])
 MTTbound=[prctile(mappaMTT(vettInd),1) prctile(mappaMTT(vettInd),99)];
 
 mappa=mappaMTT;
-imagesc(handles.MTTmap,mappa(:,:,slice))
+axes(handles.MTTmap);
+imagesc(mappa(:,:,slice))
 set(handles.MTTmap,'CLim',MTTbound)
 colormap('hot')
 hold(handles.MTTmap,'on')
